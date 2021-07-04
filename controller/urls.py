@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from .views import home,register,login,logout,create_quiz,myquizes,delete_quiz,edit_quiz,add_question,delete_question,view_questions,take_test,submit_test,view_result
 
 urlpatterns = [
@@ -22,3 +24,5 @@ urlpatterns = [
     path('submittest/<int:quiz_id>',submit_test),
 
 ]
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
