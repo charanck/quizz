@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{%block nav%}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">Hi, {{request.user.username}}</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#my-nav"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="my-nav" class="collapse navbar-collapse justify-content-end">
+        <ul class="navbar-nav ">
+            {% if user.role == 'T' %}
+            <li class="nav-item ">
+                <a class="nav-link btn btn-warning mx-2 my-1 text-white" href="/create/quiz">Create</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link btn btn-primary mx-2 my-1 text-white" href="/myquizes">My Quizes</a>
+            </li>
+            {% endif%}
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link btn btn-danger mx-2 my-1 text-white" href="/logout" method="Post">Logout</a>
+            </li>
+            {% endif%}
+        </ul>
+    </div>
+</nav>
+{%endblock nav%}

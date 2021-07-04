@@ -1,0 +1,48 @@
+{% extends 'home/nav.html'%}
+
+{% block body%}
+<form method="post" action="/addquestion/{{quiz.id}}">
+    {% csrf_token %}
+    <div class="form-group mt-2">
+        <label for="questionname" class="h3">Question:</label>
+        <input required type="text" class="form-control" name="questionname" id="questionname">
+    </div>
+    <div class="form-group  bg-light p-2 border-bottom my-2 rounded">
+        <label for="option1">Option - 1</label>
+        <input type="text" class="form-control" required id="option1" name="option1">
+        <select name="answer1" class='form-select my-1' id="answer1">
+            <option value="True">Correct</option>
+            <option value="False">In Correct</option>
+        </select>
+    </div>
+
+    <div class="form-group  bg-light p-2 border-bottom my-2 rounded">
+        <label for="option2">Option - 2</label>
+        <input type="text" class="form-control" required id="option2" name="option2">
+        <select name="answer2" class='form-select my-1' id="answer2">
+            <option value="True">Correct</option>
+            <option value="False">In Correct</option>
+        </select>
+    </div>
+
+    <div class="form-group  bg-light p-2 border-bottom my-2 rounded">
+        <label for="option3">Option - 3</label>
+        <input type="text" class="form-control" required id="option3" name="option3">
+        <select name="answer3" class='form-select my-1' id="answer3">
+            <option value="True">Correct</option>
+            <option value="False">In Correct</option>
+        </select>
+    </div>
+
+    <div class="form-group  bg-light p-2 border-bottom my-2 rounded">
+        <label for="option4">Option - 4</label>
+        <input type="text" class="form-control" required id="option4" name="option4">
+        <select name="answer4" class='form-select my-1' id="answer4">
+            <option value="True">Correct</option>
+            <option value="False">In Correct</option>
+        </select>
+    </div>
+    <button class="btn btn-success  my-2" type="submit">Save Question</button>
+    </div>
+</form>
+{% endblock body%}

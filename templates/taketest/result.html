@@ -1,0 +1,79 @@
+{% extends 'base.html'%}
+
+{% block body%}
+<nav aria-label="breadcrumb" class='mt-2'>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="{{quiz.name}}">{{pagetitle}}</li>
+    </ol>
+</nav>
+{% if percentage >=  60 %}
+<div class="result card text-center h3 alert-success my-1">
+    <div class="card-header">Your Result</div>
+    <div class="card-body">
+        <div class="card-text">
+            <p>MARK: {{percentage}}/100</p>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="card-text">
+            <p>Time Taken: {{time}}</p>
+        </div>
+    </div>
+</div>
+{% endif%}
+{% if  percentage <= 60 %}
+<div class="result card text-center h3 alert-danger my-1">
+    <div class="card-header">Your Result</div>
+    <div class="card-body">
+        <div class="card-text">
+            <p>MARK: {{percentage}}/100</p>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="card-text">
+            <p>Time Taken: {{time}}</p>
+        </div>
+    </div>
+</div>
+{% endif%}
+<form >
+    {% for question,answers in result%}
+    <div class="form-group">
+        <div class="card my-1">
+            <div class="card-body">
+                <h5 class="card-title text-black strong"><span class="text-muted">Q.No:{{forloop.counter}} </span>{{ question.question }}
+                </h5>
+                {% if answers.1 in answers.0 %}
+                <p class="card-text m-0 text-success">Your Answer: ✅{{answers.1.answer }}</p>
+                {% endif%}
+                {% if answers.1 not in answers.0 %}
+                <p class="card-text m-0 text-danger">Your Answer: &#x274C;{{answers.1.answer }}</p>
+                <p class="card-text m-0">Correct Answers: </p>
+                {% for answer in answers.0 %}
+                {% if answer == answers.0 %}
+                <option value="{{answer.id}}" class="text-success"><strong>{{answer.answer}}</strong></option>
+                        {% endif%}
+                        {% if answer != answers.0 %}
+                <option value="{{answer.id}}" class="text-success"><strong>{{answer.answer}}</strong></option>
+                        {% endif%}
+                        {% endfor%}
+                        {% endif%}
+            </div>
+        </div>
+    </div>
+    {% endfor%}
+    <button class="btn btn-outline-success my-2"><a href="/taketest/{{quiz_id}}" class='text-success'>Retake test</a></button>
+    <button class="btn btn-outline-warning my-2"><a href="/" class='text-warning'>Back to Home</a></button>
+</form>
+{% endblock body%}
+
+{% block script%}
+<script>
+history.pushState(null, document.title, location.href);
+window.addEventListener('popstate', function (event)
+{
+  history.pushState(null, document.title, location.href);
+});
+</script>
+{% endblock script%}

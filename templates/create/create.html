@@ -1,0 +1,19 @@
+{% extends 'home/nav.html'%}
+
+{% block body%}
+<nav aria-label="breadcrumb" class='mt-2'>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="{{pagetitle}}">{{pagetitle}}</li>
+    </ol>
+  </nav>
+<form method="post" action="/create/quiz">
+    {% csrf_token %}
+    <div class="form-group my-2">
+        <h3 for="quizname">Quiz Title</h3>
+        <input required type="text" class="form-control" name="quizname" id="quizname">
+        </div>
+        <button class="btn btn-success" type="submit">Create Quiz</button>
+    </div>
+</form>
+{% endblock body%}

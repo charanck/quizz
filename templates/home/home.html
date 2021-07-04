@@ -1,0 +1,22 @@
+{% extends 'home/nav.html' %}
+
+{%block body%}
+<nav aria-label="breadcrumb" class='mt-2'>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item active" aria-current="page">Home</li>
+    </ol>
+  </nav>
+{% for quiz in quizes%}
+<div class="card m-2">
+    <div class="card-body">
+        <h5 class="card-title">{{quiz.name}}</h5>
+        {% if user.role == 'S' %}
+            <a href="/taketest/{{quiz.id}}" class="btn btn-outline-primary">Take Test</a>
+        {% endif%}
+        {% if user.role == 'T' %}
+            <a href="/viewquestions/{{quiz.id}}" class="btn btn-outline-success">View Questions</a>
+        {% endif%}
+    </div>
+</div>
+{% endfor%}
+{%endblock body%}

@@ -1,0 +1,17 @@
+{% extends 'home/nav.html' %}
+
+{% block body%}
+<nav aria-label="breadcrumb" class='mt-2'>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="{{quiz.name}}">{{quiz.name}}</li>
+    </ol>
+  </nav>
+{% for question in questions%}
+<div class="card my-1">
+    <div class="card-body">
+        <h5 class="card-title">{{ question.question }}</h5>
+    </div>
+</div>
+{% endfor%}
+{% endblock body%}
