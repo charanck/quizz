@@ -14,7 +14,7 @@ from results.models import Result
 # HOME PAGE VIEW
 def home(request):
     if not verify_login(request):
-        return redirect('/register')
+        return redirect('/login')
 
     current_user = Users.objects.get(user=request.user.id)
     quizes = Quiz.objects.all()
@@ -67,7 +67,7 @@ def login(request):
 # LOGOUT ROUTE
 def logout(request):
     if not verify_login(request):
-        return redirect('/register')
+        return redirect('/login')
 
     lo(request)
     return redirect('/')
