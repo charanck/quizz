@@ -9,6 +9,7 @@ from middlewares.auth import verify_login, verify_student, verify_teacher
 from middlewares.helpers import build_test, evaluate_test,get_results
 from middlewares.verify import clean_unsubmited_test
 from results.models import Result
+from django.contrib import messages
 
 
 # HOME PAGE VIEW
@@ -40,8 +41,8 @@ def register(request):
             current_user = authenticate(username=request.POST['username'],password=request.POST['password'])
             li(request,current_user)
             return redirect('/')
-
         except:
+            messages.error(request,"Please enter valid credential to register your account!!!.")
             return redirect('/')
 
     return render(request, 'home/register.html', {"pagetitle": "Register"})
@@ -58,6 +59,8 @@ def login(request):
         if user is not None:
             li(request, user)
             return redirect("/")
+        else:
+            messages.error(request,"Invalid Username or Password, Please enter valid credentials!!!.")
     context = {
         "pagetitle": "Login"
     }
@@ -75,6 +78,10 @@ def logout(request):
 
 # CREATE QUIZE PAGE VIEW
 def create_quiz(request):
+    if not verify_teacher(request):
+        messages.error(request,"You are Unauthorised,Please login with teacher account to access the page.")
+        return redirect('/')
+        
     if request.method == "POST":
         current_user = Users.objects.get(user=request.user)
         new_quiz = Quiz(
@@ -89,6 +96,7 @@ def create_quiz(request):
 # MY QUIZES PAGE VIEW
 def myquizes(request):
     if not verify_teacher(request):
+        messages.error(request,"You are Unauthorised,Please login with teacher account to access the page.")
         return redirect('/')
 
     current_user = Users.objects.get(user=request.user.id)
@@ -104,6 +112,7 @@ def myquizes(request):
 # DELETE QUIZ ROUTE
 def delete_quiz(request, id):
     if not verify_teacher(request):
+        messages.error(request,"You are Unauthorised,Please login with teacher account to delete question.")
         return redirect('/')
 
     quiz = Quiz.objects.all().filter(pk=id)[0]
@@ -114,6 +123,7 @@ def delete_quiz(request, id):
 # EDIT QUIZ PAGE VIEW
 def edit_quiz(request, id):
     if not verify_teacher(request):
+        messages.error(request,"You are Unauthorised,Please login with teacher account to edit quiz.")
         return redirect('/')
 
     quiz = Quiz.objects.all().filter(pk=id)[0]
@@ -131,6 +141,7 @@ def edit_quiz(request, id):
 # ADD QUESTION ROUTE
 def add_question(request, id):
     if not verify_teacher(request):
+        messages.error(request,"You are Unauthorised,Please login with teacher account to add questions.")
         return redirect('/')
 
     if request.method == "GET":
@@ -171,6 +182,7 @@ def add_question(request, id):
 # DELETE QUESTION ROUTE
 def delete_question(request, id):
     if not verify_teacher(request):
+        messages.error(request,"You are Unauthorised,Please login with teacher account to delete the question.")
         return redirect('/')
 
     question = Question.objects.all().filter(pk=id)[0]
@@ -181,6 +193,7 @@ def delete_question(request, id):
 # VIEW QUESTIONS PAGE
 def view_questions(request, id):
     if not verify_teacher(request):
+        messages.error(request,"You are Unauthorised,Please login with teacher account to view the questions.")
         return redirect('/')
 
     current_user = Users.objects.get(user=request.user.id)
@@ -196,7 +209,8 @@ def view_questions(request, id):
 
 # VIEW TEST PAGE
 def take_test(request, quiz_id):
-    if not verify_login and verify_student:
+    if not (verify_login(request) and verify_student(request)):
+        messages.error(request,"You are Unauthorised,Please login with student account to take the test.")
         return redirect("/")
 
     clean_unsubmited_test(request)
@@ -219,11 +233,11 @@ def take_test(request, quiz_id):
 
 # SUBMIT ANSWER AND RESULTS PAGE
 def submit_test(request, quiz_id):
-    if not verify_login and verify_student:
+    if not (verify_login(request) and verify_student(request)):
+        messages.error(request,"You are Unauthorised,Please login with student account.")
         return redirect("/")
 
     if request.method == "POST":
-        print(request.POST)
         result, percentage,current_test_result = evaluate_test(request, quiz_id)
         context = {
             "pagetitle": "Result",
@@ -239,6 +253,10 @@ def submit_test(request, quiz_id):
 
 # View Result for the quiz
 def view_result(request,quiz_id):
+    if not (verify_login(request) and verify_teacher(request)):
+        messages.error(request,"You are Unauthorised,Please login with Teacher account.")
+        return redirect("/")
+
     current_user = Users.objects.get(user=request.user)
     current_quiz = Quiz.objects.all().filter(pk = quiz_id)[0]
     context = {

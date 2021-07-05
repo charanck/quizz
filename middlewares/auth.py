@@ -6,10 +6,12 @@ from django.contrib.auth import logout
 def verify_student(request):
     try:
         current_user = Users.objects.all().get(user=request.user)
-        if not current_user.role == 'S':
-            return HttpResponseNotAllowed()  
+        if current_user.role == 'S':
+            return True
+        else:
+            return False
     except:
-        return HttpResponseNotAllowed()
+        return False
 
 def verify_teacher(request):
     try:
